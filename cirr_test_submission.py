@@ -99,9 +99,10 @@ def test_cirr_submit_result(model, testset, save_dir, name, batch_size = 16):
         json.dump(subset_submission, f, sort_keys=True)
 
 if __name__ == '__main__':
+    
     clip_path = '...'
-    _, preprocess_train, preprocess_val = open_clip.create_model_and_transforms('ViT-B-32')
-    testset = datasets.CIRR_SavedSegment(path='...',transform=[preprocess_train, preprocess_val])
+    _, preprocess_train, preprocess_val = open_clip.create_model_and_transforms('ViT-H-14', pretrained=os.path.join(clip_path, 'open_clip_pytorch_model.bin'))
+    testset = datasets.CIRR_SavedSegment(path='..',transform=[preprocess_train, preprocess_val]) 
     import sys
     model_dir = sys.argv[1]
 

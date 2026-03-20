@@ -26,7 +26,9 @@ def test(params, model, testset, category):
                         imgs_seg = [torch.from_numpy(d).float() for d in imgs_seg]
                     imgs = torch.stack(imgs).float().cuda()
                     imgs_seg = torch.stack(imgs_seg).float().cuda()
+
                     f = model.extract_retrieval_compose(imgs, mods, imgs_seg)
+
                     f = f.data.cpu().numpy()
                     all_queries += [f]
                     imgs = []
@@ -200,7 +202,13 @@ def test_cirr_valset(params, model, testset):
                         imgs_seg = [torch.from_numpy(d).float() for d in imgs_seg]
                     imgs = torch.stack(imgs).float().cuda()
                     imgs_seg = torch.stack(imgs_seg).float().cuda()
+                    import time
+                    # start_time = time.time()
                     f = model.extract_retrieval_compose(imgs, mods, imgs_seg)
+                    # end_time = time.time()
+                    # elapsed_time = (end_time - start_time) * 1000000
+                    # print(f"Model forward pass took {elapsed_time:.6f} microseconds")
+                    # print(f"batch {imgs.shape[0]}")
                     f = f.data.cpu().numpy()
                     all_queries += [f]
                     imgs = []
@@ -274,3 +282,87 @@ def test_cirr_valset(params, model, testset):
     return cirr_out
 
 
+
+def test_fashion200k_dataset(params, model, testset):
+    """Tests a model over the given testset."""
+    
+    model.eval()
+    test_queries = testset.get_test_queries()
+    with torch.no_grad():
+        all_imgs = []
+        all_captions = []
+        all_queries = []
+        all_target_captions = []
+        if test_queries:
+            # compute test query features
+            imgs = []
+            imgs_seg = []
+            mods = []
+            for t in tqdm(test_queries):
+                imgs += [testset.get_img(t['source_img_id'])]
+                imgs_seg += [testset.get_saved_segImg(t['source_img_id'])]
+                mods += [t['mod']['str']]
+                if len(imgs) >= params.batch_size or t is test_queries[-1]:
+                    if 'torch' not in str(type(imgs[0])):
+                        imgs = [torch.from_numpy(d).float() for d in imgs]
+                        imgs_seg = [torch.from_numpy(d).float() for d in imgs_seg]
+                    imgs = torch.stack(imgs).float()
+                    imgs = torch.autograd.Variable(imgs).cuda()
+                    imgs_seg = torch.stack(imgs_seg).float()
+                    imgs_seg = torch.autograd.Variable(imgs_seg).cuda()
+                    mods = [t.encode('utf-8').decode('utf-8') for t in mods]
+                    f = model.extract_retrieval_compose(imgs, mods, imgs_seg)
+                    f = f.data.cpu().numpy()
+                    all_queries += [f]
+                    imgs = []
+                    mods = []
+                    imgs_seg = []
+            all_queries = np.concatenate(all_queries)
+            all_target_captions = [t['target_caption'] for t in test_queries]
+
+            # compute all image features
+            imgs = []
+            imgs_seg = []
+            for i in tqdm(range(len(testset.imgs))):
+                imgs += [testset.get_img(i)]
+                imgs_seg += [testset.get_saved_segImg(i)]
+                if len(imgs) >= params.batch_size or i == len(testset.imgs) - 1:
+                    if 'torch' not in str(type(imgs[0])):
+                        imgs = [torch.from_numpy(d).float() for d in imgs]
+                        imgs_seg = [torch.from_numpy(d).float() for d in imgs_seg]
+                    imgs = torch.stack(imgs).float().cuda()
+                    imgs_seg = torch.stack(imgs_seg).float().cuda()
+                    imgs = model.extract_retrieval_target(imgs, imgs_seg).data.cpu().numpy()
+                    all_imgs += [imgs]
+                    imgs = []
+                    imgs_seg = []
+            all_imgs = np.concatenate(all_imgs)
+            all_captions = [img['captions'][0] for img in testset.imgs]
+
+        # feature normalization
+        for i in range(all_queries.shape[0]):
+            all_queries[i, :] /= np.linalg.norm(all_queries[i, :])
+
+        for i in range(all_imgs.shape[0]):
+            all_imgs[i, :] /= np.linalg.norm(all_imgs[i, :])
+
+        # match test queries to target images, get nearest neighbors
+        sims = all_queries.dot(all_imgs.T)
+        if test_queries:
+            for i, t in enumerate(test_queries):
+                sims[i, t['source_img_id']] = -10e10  
+        nn_result = [np.argsort(-sims[i, :])[:110] for i in range(sims.shape[0])]
+
+        # compute recalls
+        out = []
+        nn_result = [[all_captions[nn] for nn in nns] for nns in nn_result]
+        for k in [1, 10, 50]:
+            r = 0.0
+            for i, nns in enumerate(nn_result):
+                if all_target_captions[i] in nns[:k]:
+                    r += 1
+            r /= len(nn_result)
+            out += [('recall_top' + str(k) + '_correct_composition', r)]
+
+        return out
+    

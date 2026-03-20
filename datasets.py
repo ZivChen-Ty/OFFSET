@@ -8,10 +8,6 @@ import torch.utils.data
 import string 
 import glob
 import pickle
-import pathlib
-import random
-import cv2
-from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
 from tqdm import trange
 def save_obj(obj, path):
     with open(path, 'wb') as f:
@@ -19,7 +15,7 @@ def save_obj(obj, path):
 def load_obj(path):
     with open(path, 'rb') as f:
         return pickle.load(f)
-
+    
 class FashionIQ_SavedSegment_all(torch.utils.data.Dataset):
     def __init__(self, path, transform=None, split='val-split'):
         super().__init__()
@@ -89,19 +85,48 @@ class FashionIQ_SavedSegment_all(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         caption = self.fashioniq_data[idx]
+        # mod_str = self.concat_text(caption['captions'])
         mod_str = caption['captions']
         candidate = caption['candidate']
         target = caption['target']
         out = {}
-        out['source_img_data'] = self.get_img(candidate, stage=0)
+        out['source_img_data'] = self.get_img(candidate, stage=0)#candidate_img#
         out['source_img_data_seg'] = self.get_saved_Seg(candidate, stage=0)
-        out['target_img_data'] = self.get_img(target, stage=0)
-        out['target_img_data_seg'] = self.get_saved_Seg(target, stage=0)
+        out['target_img_data'] = self.get_img(target, stage=0)#target_img#
+        out['target_img_data_seg'] = self.get_saved_Seg(target, stage=0)#target_img#
         
         out['mod'] = {'str': mod_str}
 
         return out
-    
+
+    def get_img_Seg(self, image_name, caption, device, stage=0):
+        img_path = os.path.join(self.image_dir, image_name.split('_')[0], image_name.split('_')[1] + ".jpg")
+        with open(img_path, 'rb') as f:
+            img = PIL.Image.open(f)
+            img = img.convert('RGB')
+        sub_name = image_name.split('_')[1]
+        # caption = "the pattern on dress"
+        # print(caption)
+        # print(image_name)
+        CLIPSeg_input = self.CLIPSeg_processor(text=[caption], images=[img], padding="max_length", return_tensors="pt")
+        CLIPSeg_input = CLIPSeg_input.to(device)
+        with torch.no_grad():
+            outputs = self.CLIPSeg_model(**CLIPSeg_input)
+        preds = outputs.logits.unsqueeze(1)
+        image_features = CLIPSeg_input.pixel_values[0] * torch.sigmoid(preds).permute(1, 0, 2)
+        image_features = image_features.permute(1, 2, 0)
+        image_features = (image_features - image_features.min()) / (image_features.max() - image_features.min())
+        image_features_pil = PIL.Image.fromarray((image_features.detach().cpu().numpy() * 255).astype(np.uint8))
+        image_features_pil.save(f'./dress_seg/{sub_name}.png')
+        img = self.transform[stage](image_features_pil)
+
+        seg_features = torch.sigmoid(preds).squeeze(1)
+        seg_pil = PIL.Image.fromarray((seg_features.detach().cpu().numpy() * 255).astype(np.uint8))
+        seg_pil.save(f'./dress_segmask/{sub_name}-seg.png')
+        seg_img = self.transform[stage](seg_pil)
+        # img = self.transform[stage](img)
+        return img, seg_img
+
     def get_img(self, image_name, stage=0):
         img_path = os.path.join(self.image_dir, image_name.split('_')[0], image_name.split('_')[1] + ".jpg")
         with open(img_path, 'rb') as f:
@@ -137,14 +162,13 @@ class FashionIQ_SavedSegment_all(torch.utils.data.Dataset):
             mod_str = self.concat_text(caption['captions'], correction_dict)
             candidate = caption['candidate']
             target = caption['target']
-
             out = {}
             out['source_img_id'] = images.index(candidate)
             out['target_img_id'] = images.index(target)
-            out['source_img_data'] = self.get_img(name + '_' + candidate, stage=0)
+            out['source_img_data'] = self.get_img(name + '_' + candidate, stage=0)#candidate_img#
             out['source_img_data_seg'] = self.get_saved_Seg(name + '_' + candidate, stage=0)
-            out['target_img_data'] = self.get_img(name + '_' + target, stage=0)
-            out['target_img_data_seg'] = self.get_saved_Seg(name + '_' + target, stage=0)
+            out['target_img_data'] = self.get_img(name + '_' + target, stage=0)#target_img#
+            out['target_img_data_seg'] = self.get_saved_Seg(name + '_' + target, stage=0)#target_img#
             
             out['mod'] = {'str': mod_str}
 
@@ -238,6 +262,7 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
                         'target_name': triplets['ImageName']
                     })
 
+            
             self.test_queries = self.get_test_queries()
             self.test_targets = self.get_test_targets()
 
@@ -352,6 +377,7 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
             out['target_img_data_seg'] = self.get_img(self.imgimages_all[self.imgimages_raw.index(i)].replace(".jpg", "-segmask.jpg"), 1)
             test_target.append(out)
         return test_target
+    
 
 class CIRR_SavedSegment(torch.utils.data.Dataset):
     def __init__(self, path, transform=None):
@@ -375,8 +401,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         with open(os.path.join(self.path, 'keywords_in_mods_cirr_train.json'), 'r') as f:
             self.key_words_train = json.load(f)
 
-
-
         # val data
         with open(os.path.join(self.path, 'image_captions_cirr_val.json'), 'r') as f:
             self.val_captions = json.load(f)
@@ -390,9 +414,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         else:
             self.val_queries = load_obj(os.path.join(self.path, 'cirr_val_queries.pkl'))
             self.val_targets = load_obj(os.path.join(self.path, 'cirr_val_targets.pkl'))
-        # self.val_queries, self.val_targets = self.get_val_queries()
-
-        # test data
         with open(os.path.join(self.path, 'image_captions_cirr_test1.json'), 'r') as f:
             self.test1_captions = json.load(f)
         with open(os.path.join(self.path, 'keywords_in_mods_cirr_test1.json'), 'r') as f:
@@ -407,6 +428,9 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
             self.test_name_list = load_obj(os.path.join(self.path, 'cirr_test_name_list.pkl'))
             self.test_img_data = load_obj(os.path.join(self.path, 'cirr_test_img_data.pkl'))
             self.test_queries = load_obj(os.path.join(self.path, 'cirr_test_queries.pkl'))
+
+        # self.CLIPSeg_model = self.CLIPSeg_model.to("cpu")
+
     def __len__(self):
         return len(self.cirr_data)
 
@@ -448,6 +472,7 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         seg_pil = PIL.Image.fromarray((seg_features.detach().cpu().numpy() * 255).astype(np.uint8))
         seg_pil.save(img_path.replace(".png", "-segmask.png"))
         seg_img = self.transform[stage](seg_pil)
+        # img = self.transform[stage](img)
         return img, seg_img
 
 
@@ -504,7 +529,9 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
             out['target_img_id'] = i
             out['target_img_data'] = self.get_img(val_image_path[name], 1)
             out['target_img_data_seg'] = self.get_img(val_image_path[name].replace(".png", "-segmask.png"), 1)
-
+            # if self.case_look:
+            #     out['raw_tag_img_data'] = self.get_img(val_image_path[name], return_raw=True)
+            
             test_targets.append(out)
 
         return test_queries, test_targets
