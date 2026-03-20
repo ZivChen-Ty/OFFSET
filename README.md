@@ -61,14 +61,14 @@ OFFSET consistently outperforms existing baselines on widely-used datasets, surp
 
 ### 1. FashionIQ & Shoes Datasets
 *(Evaluated using Recall@K)*
-<div style="display:flex; justify-content:center; align-items:flex-start; gap:12px">
+<div align="center">
   <img src="assets/results-fiq.png" alt="FashionIQ and Shoes Results" height="330" style="object-fit:contain;">
   <img src="assets/results-shoes.png" alt="FashionIQ and Shoes Results" height="330" style="object-fit:contain;">
 </div>
 
 ### 2. CIRR Dataset
 *(Evaluated using R@K and R_subset@K)* <p align="center">
-  <img src="assets/results-cirr.png" alt="CIRR Results" width="900">
+  <img src="assets/results-cirr.png" alt="CIRR Results" width="700">
 </p>
 
 [⬆ Back to top](#top)
