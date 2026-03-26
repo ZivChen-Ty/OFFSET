@@ -231,9 +231,7 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
 
         with open(os.path.join(self.path, 'correction_dict_{}.json'.format('shoes')), 'r') as f:
             self.correction_dict = json.load(f)
-
-        with open(os.path.join(self.path, 'image_captions_shoes.json'), 'r') as f:
-            self.all_captions = json.load(f)
+            
 
         if not os.path.exists(os.path.join(self.path, 'shoes_train_triplets.pkl')):
             self.train_relative_pairs = []
@@ -289,10 +287,6 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
     def __getitem__(self, idx):
 
         caption = self.train_relative_pairs[idx]
-        candidate_name = caption['source_name']
-        target_name = caption['target_name']
-        candidate_caption = self.all_captions[candidate_name]
-        target_caption = self.all_captions[target_name]
 
         out = {}
         out['source_img_data'] = self.get_img(caption['source'], 0)
@@ -344,10 +338,6 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
             candidate = caption['source']
             target = caption['target']
 
-            candidate_name = caption['source_name']
-            target_name = caption['target_name']
-            candidate_caption = self.all_captions[candidate_name]
-            target_caption = self.all_captions[target_name]
 
             out = {}
             out['source_img_id'] = self.imgimages_all.index(candidate)
@@ -368,9 +358,6 @@ class Shoes_SavedSegment(torch.utils.data.Dataset):
         test_target = []
         for i in imgnames:
             out = {} 
-
-            target_name = i
-            target_caption = self.all_captions[target_name]
 
             out['target_img_id'] = self.imgimages_raw.index(i)
             out['target_img_data'] = self.get_img(self.imgimages_all[self.imgimages_raw.index(i)], 1)
@@ -395,17 +382,8 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
             self.train_image_path = json.load(f)
             self.train_image_name = list(self.train_image_path.keys()) 
 
-        with open(os.path.join(self.path, 'image_captions_cirr_train.json'), 'r') as f:
-            self.train_captions = json.load(f)
-
-        with open(os.path.join(self.path, 'keywords_in_mods_cirr_train.json'), 'r') as f:
-            self.key_words_train = json.load(f)
 
         # val data
-        with open(os.path.join(self.path, 'image_captions_cirr_val.json'), 'r') as f:
-            self.val_captions = json.load(f)
-        with open(os.path.join(self.path, 'keywords_in_mods_cirr_val.json'), 'r') as f:
-            self.key_words_val = json.load(f)
 
         if not os.path.exists(os.path.join(self.path, 'cirr_val_queries.pkl')):
             self.val_queries, self.val_targets = self.get_val_queries()
@@ -414,11 +392,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         else:
             self.val_queries = load_obj(os.path.join(self.path, 'cirr_val_queries.pkl'))
             self.val_targets = load_obj(os.path.join(self.path, 'cirr_val_targets.pkl'))
-        with open(os.path.join(self.path, 'image_captions_cirr_test1.json'), 'r') as f:
-            self.test1_captions = json.load(f)
-        with open(os.path.join(self.path, 'keywords_in_mods_cirr_test1.json'), 'r') as f:
-            self.key_words_test1 = json.load(f)
-
         if not os.path.exists(os.path.join(self.path, 'cirr_test_queries.pkl')):
             self.test_name_list, self.test_img_data, self.test_queries = self.get_test_queries()
             save_obj(self.test_name_list, os.path.join(self.path, 'cirr_test_name_list.pkl'))
@@ -440,8 +413,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         mod_str = caption['caption']
         target_name = caption['target_hard']
         
-        candidate_caption = self.train_captions[reference_name]
-        target_caption = self.train_captions[target_name]
 
         out = {}
         out['source_img_data'] = self.get_img(self.train_image_path[reference_name], 0)
@@ -504,9 +475,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
             subset_names = caption['img_set']['members']
             subset_ids = [val_image_name.index(n) for n in subset_names]
 
-            candidate_caption = self.val_captions[reference_name]
-            target_caption = self.val_captions[target_name]
-
             out = {}
             out['source_img_id'] = val_image_name.index(reference_name)
             out['source_img_data'] = self.get_img(val_image_path[reference_name], 1)
@@ -522,15 +490,10 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         
         for i in trange(len(val_image_name)):
             name = val_image_name[i]
-
-            candidate_caption = self.val_captions[name]
-
             out = {}
             out['target_img_id'] = i
             out['target_img_data'] = self.get_img(val_image_path[name], 1)
             out['target_img_data_seg'] = self.get_img(val_image_path[name].replace(".png", "-segmask.png"), 1)
-            # if self.case_look:
-            #     out['raw_tag_img_data'] = self.get_img(val_image_path[name], return_raw=True)
             
             test_targets.append(out)
 
@@ -552,7 +515,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
             out = {}
             caption = test_data[i]
 
-            candidate_caption = self.test1_captions[caption['reference']]
 
             out['pairid'] = caption['pairid']
             out['reference_data'] = self.get_img(test_image_path[caption['reference']], 1)
@@ -566,7 +528,6 @@ class CIRR_SavedSegment(torch.utils.data.Dataset):
         image_data = []
         for i in trange(len(test_image_name)):
             name = test_image_name[i]
-            candidate_caption = self.test1_captions[name]
 
             data = self.get_img(test_image_path[name], 1)
             data_seg = self.get_img(test_image_path[name].replace(".png", "-segmask.png"), 1)
