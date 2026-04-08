@@ -273,6 +273,15 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
 
 <table style="width:100%; border:none; text-align:center; background-color:transparent;">
     <tr style="border:none;">
+      <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
+      <img src="/assets/logos/tema-logo.png" alt="TEMA" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
+      <b>TEMA (ACL'26)</b><br>
+      <span style="font-size: 0.9em;">
+        <a href="https://lee-zixu.github.io/TEMA.github.io/" target="_blank">Web</a> | 
+        <a href="https://github.com/Lee-zixu/TEMA" target="_blank">Code</a> | 
+        <!-- <a href="https://ojs.aaai.org/index.php/AAAI/article/view/39507" target="_blank">Paper</a> -->
+      </span>
+    </td>
           <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/consep-logo.png" alt="ConeSep" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>ConeSep (CVPR'26)</b><br>
@@ -291,7 +300,9 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
         <!-- <a href="https://ojs.aaai.org/index.php/AAAI/article/view/37608" target="_blank">Paper</a> -->
       </span>
     </td>
-      <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
+    </tr>
+  <tr style="border:none;">
+    <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/habit-logo.png" alt="HABIT" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>HABIT (AAAI'26)</b><br>
       <span style="font-size: 0.9em;">
@@ -300,8 +311,6 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/37608" target="_blank">Paper</a>
       </span>
     </td>
-    </tr>
-  <tr style="border:none;">
     <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/retrack-logo.png" alt="ReTrack" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>ReTrack (AAAI'26)</b><br>
@@ -320,6 +329,8 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/39181" target="_blank">Paper</a>
       </span>
     </td>  
+    </tr>
+  <tr style="border:none;">
     <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/hud-logo.png" alt="HUD" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>HUD (ACM MM'25)</b><br>
@@ -329,8 +340,6 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
         <a href="https://dl.acm.org/doi/10.1145/3746027.3755445" target="_blank">Paper</a>
       </span>
     </td>
-    </tr>
-  <tr style="border:none;">
     <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/encoder-logo.png" alt="ENCODER" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>ENCODER (AAAI'25)</b><br>
