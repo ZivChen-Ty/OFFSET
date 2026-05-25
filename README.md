@@ -272,32 +272,34 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
 *Ecosystem & Other Works from our Team*
 
 <table style="width:100%; border:none; text-align:center; background-color:transparent;">
-    <tr style="border:none;">
-      <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
+  <tr style="border:none;">
+   <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
       <img src="/assets/logos/tema-logo.png" alt="TEMA" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>TEMA (ACL'26)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://lee-zixu.github.io/TEMA.github.io/" target="_blank">Web</a> | 
-        <a href="https://github.com/Lee-zixu/ACL26-TEMA" target="_blank">Code</a> | 
-        <!-- <a href="https://ojs.aaai.org/index.php/AAAI/article/view/39507" target="_blank">Paper</a> -->
-      </span>
-    </td>
-          <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
-      <img src="/assets/logos/consep-logo.png" alt="ConeSep" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
-      <b>ConeSep (CVPR'26)</b><br>
-      <span style="font-size: 0.9em;">
-        <a href="https://lee-zixu.github.io/ConeSep.github.io/" target="_blank">Web</a> | 
-        <a href="https://github.com/Lee-zixu/ConeSep" target="_blank">Code</a> | 
-        <!-- <a href="https://ojs.aaai.org/index.php/AAAI/article/view/37608" target="_blank">Paper</a> -->
+       <a href="https://arxiv.org/abs/2604.21806" target="_blank">Paper</a> |   
+        <a href="https://lee-zixu.github.io/TEMA.github.io/" target="_blank">Project</a> | 
+        <a href="https://github.com/Lee-zixu/ACL26-TEMA" target="_blank">Code</a>     
       </span>
     </td>
    <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
-      <img src="/assets/logos/airknow-logo.png" alt="HABIT" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
+      <img src="/assets/logos/consep-logo.png" alt="ConeSep" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
+      <b>ConeSep (CVPR'26)</b><br>
+      <span style="font-size: 0.9em;">
+       <a href="https://arxiv.org/abs/2604.20358" target="_blank">Paper</a> | 
+        <a href="https://lee-zixu.github.io/ConeSep.github.io/" target="_blank">Project</a> | 
+        <a href="https://github.com/lee-zixu/ConeSep" target="_blank">Code</a> |
+       <a href="http://xhslink.com/o/2Cm9p4DMS1" target="_blank">Blog Post (Chinese)</a>
+      </span>
+    </td>
+     <td style="width:30%; border:none; vertical-align:top; padding-top:30px;">
+      <img src="/assets/logos/airknow-logo.png" alt="Air-Know" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>Air-Know (CVPR'26)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://zhihfu.github.io/Air-Know.github.io/" target="_blank">Web</a> | 
-        <a href="https://github.com/zhihfu/Air-Know" target="_blank">Code</a> | 
-        <!-- <a href="https://ojs.aaai.org/index.php/AAAI/article/view/37608" target="_blank">Paper</a> -->
+       <a href="https://arxiv.org/abs/2604.19386" target="_blank">Paper</a> | 
+        <a href="https://zhihfu.github.io/Air-Know.github.io/" target="_blank">Project</a> | 
+        <a href="https://github.com/zhihfu/Air-Know" target="_blank">Code</a> |
+       <a href="http://xhslink.com/o/5oVjQ1a3apO" target="_blank">Blog Post (Chinese)</a>
       </span>
     </td>
     </tr>
@@ -306,7 +308,7 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
       <img src="/assets/logos/habit-logo.png" alt="HABIT" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>HABIT (AAAI'26)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://lee-zixu.github.io/HABIT.github.io/" target="_blank">Web</a> | 
+        <a href="https://lee-zixu.github.io/HABIT.github.io/" target="_blank">Project</a> | 
         <a href="https://github.com/Lee-zixu/HABIT" target="_blank">Code</a> | 
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/37608" target="_blank">Paper</a>
       </span>
@@ -315,7 +317,7 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
       <img src="/assets/logos/retrack-logo.png" alt="ReTrack" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>ReTrack (AAAI'26)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://lee-zixu.github.io/ReTrack.github.io/" target="_blank">Web</a> | 
+        <a href="https://lee-zixu.github.io/ReTrack.github.io/" target="_blank">Project</a> | 
         <a href="https://github.com/Lee-zixu/ReTrack" target="_blank">Code</a> | 
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/39507" target="_blank">Paper</a>
       </span>
@@ -324,7 +326,7 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
       <img src="/assets/logos/intent-logo.png" alt="INTENT" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>INTENT (AAAI'26)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://zivchen-ty.github.io/INTENT.github.io/" target="_blank">Web</a> | 
+        <a href="https://zivchen-ty.github.io/INTENT.github.io/" target="_blank">Project</a> | 
         <a href="https://github.com/ZivChen-Ty/INTENT" target="_blank">Code</a> | 
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/39181" target="_blank">Paper</a>
       </span>
@@ -335,7 +337,7 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
       <img src="/assets/logos/hud-logo.png" alt="HUD" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>HUD (ACM MM'25)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://zivchen-ty.github.io/HUD.github.io/" target="_blank">Web</a> | 
+        <a href="https://zivchen-ty.github.io/HUD.github.io/" target="_blank">Project</a> | 
         <a href="https://github.com/ZivChen-Ty/HUD" target="_blank">Code</a> | 
         <a href="https://dl.acm.org/doi/10.1145/3746027.3755445" target="_blank">Paper</a>
       </span>
@@ -344,7 +346,7 @@ If you have any questions, feel free to [open an issue](https://www.google.com/s
       <img src="/assets/logos/encoder-logo.png" alt="ENCODER" style="height:65px; width:auto; border-radius:8px; margin-bottom:8px;"><br>
       <b>ENCODER (AAAI'25)</b><br>
       <span style="font-size: 0.9em;">
-        <a href="https://sdu-l.github.io/ENCODER.github.io/" target="_blank">Web</a> | 
+        <a href="https://sdu-l.github.io/ENCODER.github.io/" target="_blank">Project</a> | 
         <a href="https://github.com/Lee-zixu/ENCODER" target="_blank">Code</a> | 
         <a href="https://ojs.aaai.org/index.php/AAAI/article/view/32541" target="_blank">Paper</a>
       </span>
